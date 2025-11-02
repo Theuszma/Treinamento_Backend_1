@@ -1,0 +1,94 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Produto {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  nome         String
+  descricao    String
+  preco        Float
+  categoriaId  String?  @db.ObjectId
+  categoria    Categoria? @relation(fields: [categoriaId], references: [id])
+  compraIds    String[] @db.ObjectId
+}
+
+model Categoria {
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  nome      String    @unique
+  produtos  Produto[]
+}
+
+model Compra {
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  precoTotal  Float
+  createdAt   DateTime   @default(now())
+  userId      String     @db.ObjectId
+  user        User       @relation(fields: [userId], references: [id])
+  produtoIds  String[]   @db.ObjectId
+}
+
+enum Role {
+  USER
+  ADMIN
+  SUPER_ADMIN
+}
+
+model User {
+  id            String      @id @default(auto()) @map("_id") @db.ObjectId
+  name          String?
+  email         String      @unique
+  emailVerified Boolean?
+  image         String?
+  role          Role        @default(USER)
+  auraStatus    Int         @default(0)
+  compras       Compra[]
+  sessions      Session[]
+  accounts      Account[]
+  @@map("user")
+}
+
+model Session {
+  id          String    @id @map("_id")
+  expiresAt   DateTime
+  token       String    @unique
+  createdAt   DateTime
+  updatedAt   DateTime
+  ipAddress   String?
+  userAgent   String?
+  userId      String    @db.ObjectId
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id @map("_id")
+  accountId             String
+  providerId            String
+  userId                String    @db.ObjectId
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime
+  updatedAt             DateTime
+  @@map("account")
+}
+
+model Verification {
+  id         String    @id @map("_id")
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime?
+  updatedAt  DateTime?
+  @@map("verification")
+}
