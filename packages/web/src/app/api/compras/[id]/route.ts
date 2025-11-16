@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { getCompraById, deleteCompra } from "@/services/compra.service";
+import { getCompraById, deleteCompra, updateCompraStatus } from "@/services/compra.service";
+import { handleError } from "@/lib/handleError";
 
 export async function GET(request: Request, { params }: { params: { id: string } }) {
   try {
@@ -9,7 +10,17 @@ export async function GET(request: Request, { params }: { params: { id: string }
     }
     return NextResponse.json(compra);
   } catch (error) {
-    return NextResponse.json({ message: "Ocorreu um erro ao buscar a compra." }, { status: 500 });
+    return handleError(error);
+  }
+}
+
+export async function PATCH(request: Request, { params }: { params: { id: string } }) {
+  try {
+    const data = await request.json();
+    const updatedCompra = await updateCompraStatus(params.id, data);
+    return NextResponse.json(updatedCompra);
+  } catch (error) {
+    return handleError(error);
   }
 }
 
@@ -18,6 +29,6 @@ export async function DELETE(request: Request, { params }: { params: { id: strin
     await deleteCompra(params.id);
     return new NextResponse(null, { status: 204 });
   } catch (error) {
-    return NextResponse.json({ message: "Ocorreu um erro ao deletar a compra." }, { status: 500 });
+    return handleError(error);
   }
 }

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { createUser, findUserByEmail } from "@/services/user.service";
-import { ZodError } from "zod";
+import { handleError } from "@/lib/handleError";
 
 export async function POST(request: Request) {
   try {
@@ -12,14 +12,8 @@ export async function POST(request: Request) {
     }
 
     const newUser = await createUser(data);
-    const { ...userWithoutPassword } = newUser; 
-
-    return NextResponse.json(userWithoutPassword, { status: 201 });
-
+    return NextResponse.json(newUser, { status: 201 });
   } catch (error) {
-    if (error instanceof ZodError) {
-      return NextResponse.json({ message: "Dados de entrada inválidos", errors: error.issues }, { status: 400 });
-    }
-    return NextResponse.json({ message: "Ocorreu um erro ao registrar o usuário." }, { status: 500 });
+    return handleError(error);
   }
 }

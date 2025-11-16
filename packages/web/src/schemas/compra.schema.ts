@@ -6,3 +6,13 @@ export const createCompraSchema = z.object({
 });
 
 export const updateCompraSchema = createCompraSchema.partial();
+
+export const updateCompraStatusSchema = z.object({
+  status: z.enum([
+    "PENDING",
+    "PAID",
+    "SHIPPED",
+    "DELIVERED",
+    "CANCELLED",
+  ]),
+});

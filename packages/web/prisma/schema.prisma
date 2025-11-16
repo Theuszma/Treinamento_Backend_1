@@ -8,30 +8,41 @@ datasource db {
 }
 
 model Produto {
-  id           String   @id @default(auto()) @map("_id") @db.ObjectId
-  nome         String
-  descricao    String
-  preco        Float
-  categoriaId  String?  @db.ObjectId
-  categoria    Categoria? @relation(fields: [categoriaId], references: [id])
-  compraIds    String[] @db.ObjectId
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  nome        String
+  descricao   String
+  preco       Float
+  imageUrl    String?  
+  categoriaId String?  @db.ObjectId
+  categoria   Categoria? @relation(fields: [categoriaId], references: [id])
+  compraIds   String[] @db.ObjectId
 }
 
 model Categoria {
-  id        String    @id @default(auto()) @map("_id") @db.ObjectId
-  nome      String    @unique
-  produtos  Produto[]
+  id       String    @id @default(auto()) @map("_id") @db.ObjectId
+  nome     String    @unique
+  produtos Produto[]
+}
+
+enum CompraStatus {
+  PENDING
+  PAID
+  SHIPPED
+  DELIVERED
+  CANCELLED
 }
 
 model Compra {
-  id          String     @id @default(auto()) @map("_id") @db.ObjectId
-  precoTotal  Float
-  createdAt   DateTime   @default(now())
-  userId      String     @db.ObjectId
-  user        User       @relation(fields: [userId], references: [id])
-  produtoIds  String[]   @db.ObjectId
+  id         String       @id @default(auto()) @map("_id") @db.ObjectId
+  precoTotal Float
+  createdAt  DateTime     @default(now())
+  userId     String       @db.ObjectId
+  user       User         @relation(fields: [userId], references: [id])
+  produtoIds String[]     @db.ObjectId
+  status     CompraStatus @default(PENDING) // Adicionei este campo de volta
 }
 
+// O 'enum Role' e o 'model User' foram movidos para fora do 'model Compra'
 enum Role {
   USER
   ADMIN
@@ -53,15 +64,15 @@ model User {
 }
 
 model Session {
-  id          String    @id @map("_id")
+  id          String   @id @map("_id")
   expiresAt   DateTime
-  token       String    @unique
+  token       String   @unique
   createdAt   DateTime
   updatedAt   DateTime
   ipAddress   String?
   userAgent   String?
-  userId      String    @db.ObjectId
-  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String   @db.ObjectId
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   @@map("session")
 }
 

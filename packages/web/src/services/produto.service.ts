@@ -1,5 +1,4 @@
 import prisma from "@/lib/prisma";
-import { createProdutoSchema, updateProdutoSchema } from "@/schemas/produto.schema";
 
 export const getProdutos = async () => {
   return await prisma.produto.findMany({ include: { categoria: true } });
@@ -10,8 +9,7 @@ export const getProdutoById = async (id: string) => {
 };
 
 export const createProduto = async (data: any) => {
-  const validatedData = createProdutoSchema.parse(data);
-  const { categoriaId, ...produtoData } = validatedData;
+  const { categoriaId, ...produtoData } = data;
 
   return await prisma.produto.create({
     data: {
@@ -25,9 +23,12 @@ export const createProduto = async (data: any) => {
   });
 };
 
+
 export const updateProduto = async (id: string, data: any) => {
-  const validatedData = updateProdutoSchema.parse(data);
-  return await prisma.produto.update({ where: { id }, data: validatedData });
+  return await prisma.produto.update({ 
+    where: { id }, 
+    data: data 
+  });
 };
 
 export const deleteProduto = async (id: string) => {

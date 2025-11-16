@@ -1,45 +1,41 @@
 import { NextResponse } from "next/server";
-import { getProdutoById, updateProduto, deleteProduto } from "@/services/produto.service";
-import { updateProdutoSchema } from "@/schemas/produto.schema";
-import { ZodError } from "zod";
+import { getProdutos, createProduto } from "@/services/produto.service";
+import { createProdutoSchema } from "@/schemas/produto.schema";
+import { handleError } from "@/lib/handleError";
+import { uploadImageToS3 } from "@/lib/s3";
 
-export async function GET(request: Request, { params }: { params: { id: string } }) {
+export async function GET(request: Request) {
   try {
-    const produto = await getProdutoById(params.id);
-    if (!produto) {
-      return NextResponse.json({ message: "Produto não encontrado" }, { status: 404 });
-    }
-    return NextResponse.json(produto);
+    const produtos = await getProdutos();
+    return NextResponse.json(produtos);
   } catch (error) {
-    return NextResponse.json({ message: "Ocorreu um erro ao buscar o produto." }, { status: 500 });
+    return handleError(error);
   }
 }
 
-export async function PUT(request: Request, { params }: { params: { id: string } }) {
+export async function POST(request: Request) {
   try {
-    const data = await request.json();
-    // Valida os dados de entrada com o schema de atualização
-    updateProdutoSchema.parse(data);
+    const formData = await request.formData();
+    
+    const data = Object.fromEntries(formData);
+    const validatedData = createProdutoSchema.parse(data);
 
-    const updatedProduto = await updateProduto(params.id, data);
-    return NextResponse.json(updatedProduto);
+    const file = formData.get("imagem") as File | null;
+    let imageUrl: string | undefined = undefined;
 
-  } catch (error) {
-    if (error instanceof ZodError) {
-      return NextResponse.json(
-        { message: "Dados de entrada inválidos", errors: error.issues },
-        { status: 400 }
-      );
+    if (file) {
+      imageUrl = await uploadImageToS3(file);
     }
-    return NextResponse.json({ message: "Ocorreu um erro ao atualizar o produto." }, { status: 500 });
-  }
-}
 
-export async function DELETE(request: Request, { params }: { params: { id: string } }) {
-  try {
-    await deleteProduto(params.id);
-    return new NextResponse(null, { status: 204 });
+    const produtoParaSalvar = {
+      ...validatedData,
+      imageUrl: imageUrl,
+    };
+
+    const newProduto = await createProduto(produtoParaSalvar);
+    return NextResponse.json(newProduto, { status: 201 });
+
   } catch (error) {
-    return NextResponse.json({ message: "Ocorreu um erro ao deletar o produto." }, { status: 500 });
+    return handleError(error);
   }
 }
