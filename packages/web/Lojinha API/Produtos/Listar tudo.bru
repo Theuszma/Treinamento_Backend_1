@@ -1,0 +1,22 @@
+meta {
+  name: Listar tudo
+  type: http
+  seq: 2
+}
+
+get {
+  url: http://localhost:3000/api/produtos
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
+
+docs {
+  Retorna a lista completa de produtos cadastrados.
+  
+  Retorno (200 OK): Array de objetos de produtos, incluindo os dados da categoria relacionada (se houver).
+}

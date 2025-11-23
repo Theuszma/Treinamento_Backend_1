@@ -1,0 +1,38 @@
+meta {
+  name: Registrar
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://localhost:3000/api/auth/register
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "name": "Teste Bruno foda",
+    "email": "testefoda@brunofoda.com",
+    "password": "senhafoda123456"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
+
+docs {
+  Cria uma nova conta de usuário no sistema. Verifica se o e-mail já existe antes de criar.
+  
+  Body (JSON):
+  
+  name (String, Opcional): Nome do usuário.
+  
+  email (String, Obrigatório): E-mail válido.
+  
+  password (String, Obrigatório): Mínimo 6 caracteres.
+  
+  Retorno (201 Created): Retorna o objeto do usuário criado (sem a senha).
+}

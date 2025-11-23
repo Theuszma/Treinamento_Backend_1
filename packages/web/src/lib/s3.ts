@@ -1,3 +1,6 @@
+// COM AWS S3
+
+/*
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 
 const s3Client = new S3Client({
@@ -18,9 +21,22 @@ export const uploadImageToS3 = async (file: File) => {
     Key: fileName,
     Body: buffer,
     ContentType: file.type,
+    // ACL: "public-read", // Descomente se der merda =) 
   };
 
   await s3Client.send(new PutObjectCommand(params));
 
   return `https://${bucketName}.s3.${process.env.AWS_REGION}.amazonaws.com/${fileName}`;
+};
+*/
+
+//  MOCK
+
+export const uploadImageToS3 = async (file: File) => {
+  await new Promise((resolve) => setTimeout(resolve, 500));
+
+  console.log(`[MOCK S3] Upload simulado do arquivo: ${file.name}`);
+  
+  const sanitizedName = file.name.replace(/\s/g, "_");
+  return `https://placehold.co/600x400?text=${sanitizedName}`; // URL foda p gerar img
 };

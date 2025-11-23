@@ -1,0 +1,30 @@
+meta {
+  name: Estatísticas
+  type: http
+  seq: 1
+}
+
+get {
+  url: http://localhost:3000/api/users/[***~~COLE_O_ID_DO_USER~~***]/stats
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
+
+docs {
+  Retorna métricas de consumo de um usuário específico.
+  
+  URL: /api/users/[ID_DO_USUARIO]/stats
+  
+  Retorno (200 OK): JSON contendo:
+  
+  totalGasto: Soma de todas as compras.
+  
+  numeroDeCompras: Quantidade de pedidos feitos.
+  
+  produtoMaisComprado: Objeto completo do produto favorito (ou null).
+}

@@ -1,0 +1,41 @@
+meta {
+  name: Criar Produto
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://localhost:3000/api/produtos
+  body: multipartForm
+  auth: inherit
+}
+
+body:multipart-form {
+  nome: Tênis de corrida @contentType(Text)
+  descricao: tenis muito foda @contentType(Text)
+  preco: 9999999.99 @contentType(text)
+  imagem: @file(C:\Users\mathe_pl22lfo\Desktop\Code_Generated_Image.png)
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
+
+docs {
+  Esta rota NÃO aceita JSON. O Body deve ser enviado como Multipart Form (form-data) para suportar o upload de imagem.
+  
+  Campos do Form-Data:
+  
+  nome (Text): Nome do produto (min 3 chars).
+  
+  descricao (Text): Detalhes do produto (min 10 chars).
+  
+  preco (Text): Valor numérico (ex: "299.90"). Será convertido para número no backend.
+  
+  categoriaId (Text, Opcional): ID da categoria existente.
+  
+  imagem (File, Opcional): Arquivo de imagem. Será salvo no S3 (ou Mock) e a URL salva no banco.
+  
+  Retorno (201 Created): Objeto do produto com a imageUrl preenchida.
+}

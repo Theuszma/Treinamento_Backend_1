@@ -1,0 +1,35 @@
+meta {
+  name: Login
+  type: http
+  seq: 2
+}
+
+post {
+  url: http://localhost:3000/api/auth/login
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "email": "teste@bruno.com",
+    "password": "senha123456"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
+
+docs {
+  Autentica um usuário existente.
+  
+  Body (JSON):
+  
+  email (String, Obrigatório).
+  
+  password (String, Obrigatório).
+  
+  Retorno (200 OK): Retorna os dados do usuário se as credenciais estiverem corretas.
+}

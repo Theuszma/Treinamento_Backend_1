@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "Lojinha API",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}

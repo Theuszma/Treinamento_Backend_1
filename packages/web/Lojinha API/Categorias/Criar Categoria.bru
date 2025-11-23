@@ -1,0 +1,33 @@
+meta {
+  name: Criar Categoria
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://localhost:3000/api/categorias
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "nome": "Esportes"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
+
+docs {
+  Cria uma nova categoria para agrupar produtos
+  
+  Body (JSON):
+  
+  nome (String, Obrigatório): Ex: "Eletrônicos", "Roupas".
+  
+  
+  Retorno (201 Created): Objeto da categoria criada.
+}

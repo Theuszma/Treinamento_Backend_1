@@ -1,0 +1,35 @@
+meta {
+  name: Nova compra
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://localhost:3000/api/compras
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "userId": "COLE_O_ID_DO_USER_AQUI",
+    "produtoIds": ["COLE_O_ID_DO_PRODUTO_AQUI"]
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
+
+docs {
+  Registra uma nova compra para um usuário. O valor total (precoTotal) é calculado automaticamente pelo backend somando os produtos.
+  
+  Body (JSON):
+  
+  userId (String, Obrigatório): ID do usuário que está comprando.
+  
+  produtoIds (Array de Strings, Obrigatório): Lista de IDs dos produtos comprados. Ex: ["id1", "id2"].
+  
+  Retorno (201 Created): Objeto da compra com status inicial PENDING
+}

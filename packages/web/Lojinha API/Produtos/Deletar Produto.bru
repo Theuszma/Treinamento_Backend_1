@@ -1,0 +1,16 @@
+meta {
+  name: Deletar Produto
+  type: http
+  seq: 4
+}
+
+delete {
+  url: http://localhost:3000/api/produtos/{***~~COLE_O_ID_DO_PRODUTO_AQUI~~***]
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

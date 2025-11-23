@@ -1,0 +1,22 @@
+meta {
+  name: Listar Categorias
+  type: http
+  seq: 2
+}
+
+get {
+  url: http://localhost:3000/api/categorias
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
+
+docs {
+  Retorna uma lista com todas as categorias cadastradas no sistema.
+  
+  Retorno (200 OK): Array de objetos contendo id e nome de cada categoria.
+}

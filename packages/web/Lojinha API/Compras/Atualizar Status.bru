@@ -1,0 +1,42 @@
+meta {
+  name: Atualizar Status
+  type: http
+  seq: 2
+}
+
+patch {
+  url: http://localhost:3000/api/compras/[***~~COLE_O_ID_DA_COMPRA~~***]
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "status": "PAID"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
+
+docs {
+  Atualiza o status de uma compra e dispara e-mail de notificação para o usuário (se configurado).
+  *OBS.: Tem que atualizar o json para o status que você deseja
+  
+  URL: /api/compras/[***~~ID_DA_COMPRA~~~***]
+  
+  
+  Body (JSON):
+  
+  "PENDING" (Pendente)
+  
+  "PAID" (Pago - Envia e-mail)
+  
+  "SHIPPED" (Enviado - Envia e-mail)
+  
+  "DELIVERED" (Entregue - Envia e-mail)
+  
+  "CANCELLED" (Cancelado)
+}

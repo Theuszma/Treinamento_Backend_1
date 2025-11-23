@@ -1,0 +1,21 @@
+meta {
+  name: Atualizar Produto
+  type: http
+  seq: 3
+}
+
+put {
+  url: http://localhost:3000/api/produtos/[***~~COLE_O_ID_DO_PRODUTO_AQUI~~***]
+  body: multipartForm
+  auth: inherit
+}
+
+body:multipart-form {
+  nome: t(p)enis foda @contentType(text)
+  preco: 9.99 @contentType(text)
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
